@@ -1,0 +1,22 @@
+name: Fahrtenbuch Funktionstests
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: '15 5 * * *'
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test-Abhängigkeiten installieren
+        run: npm install --no-save --no-package-lock jsdom@24 exceljs@4.4.0
+      - name: 28 Testfahrten und Excel/Backup prüfen
+        run: node tests/smoke.cjs
